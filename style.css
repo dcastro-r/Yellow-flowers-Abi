@@ -1,0 +1,453 @@
+        body {
+            font-family: 'Quicksand', sans-serif;
+            overflow-x: hidden;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .font-romantic {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        /* High-contrast lettering for the floating dedication. */
+        .phrase-outline {
+            font-weight: 900;
+            paint-order: stroke fill;
+            text-shadow: 0 2px 4px rgba(255, 255, 255, 0.7), 0 3px 10px rgba(15, 23, 42, 0.28);
+        }
+
+        .phrase-ink {
+            color: #1c1917;
+            -webkit-text-stroke: 0.55px #fef3c7;
+            text-stroke: 0.55px #fef3c7;
+        }
+
+        .phrase-yellow {
+            color: #facc15;
+            -webkit-text-stroke: 0.7px #451a03;
+            text-stroke: 0.7px #451a03;
+            text-shadow: 0 2px 4px rgba(255, 251, 235, 0.75), 0 3px 10px rgba(69, 26, 3, 0.3);
+        }
+
+        .sky-night .phrase-ink {
+            color: #f8fafc;
+            -webkit-text-stroke-color: #0f172a;
+            text-stroke-color: #0f172a;
+        }
+
+        .sky-night .phrase-yellow {
+            color: #fcd34d;
+        }
+
+        /* Continuous Day Sky Background */
+        .sky-day {
+            background: linear-gradient(to bottom, #38bdf8 0%, #7dd3fc 40%, #bae6fd 70%, #bae6fd 100%);
+            transition: background 1.5s ease-in-out;
+        }
+
+        /* Continuous Night Sky Background */
+        .sky-night {
+            background: linear-gradient(to bottom, #090d16 0%, #0f172a 40%, #1e1b4b 75%, #31103f 100%);
+            transition: background 1.5s ease-in-out;
+        }
+
+        /* Fireflies Animation */
+        @keyframes fireflyGlow {
+
+            0%,
+            100% {
+                opacity: 0.2;
+                transform: scale(0.8) translate(0, 0);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.3) translate(15px, -20px);
+            }
+        }
+
+        .firefly {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background-color: #fef08a;
+            border-radius: 50%;
+            box-shadow: 0 0 12px 4px rgba(250, 204, 21, 0.8);
+            pointer-events: none;
+            z-index: 12;
+            animation: fireflyGlow 3s infinite ease-in-out;
+        }
+
+        /* Gentle Wind Sway for Flowers */
+        @keyframes sway {
+
+            0%,
+            100% {
+                transform: rotate(-2.5deg);
+            }
+
+            50% {
+                transform: rotate(2.5deg);
+            }
+        }
+
+        .sway-flower {
+            transform-origin: bottom center;
+            animation: sway 4s infinite ease-in-out;
+        }
+
+        /* Twenty-one flowers stay in a single lower meadow line, below the dedication. */
+        .meadow-flower {
+            flex: 0 0 calc((100% - 4rem) / 21);
+            margin: 0;
+        }
+
+        @media (min-width: 640px) {
+            .meadow-flower {
+                flex-basis: calc((100% - 8rem) / 21);
+            }
+        }
+
+        /* Spin 3D Animation for Card Popup */
+        @keyframes spinZoomIn {
+            0% {
+                transform: scale(0.1) rotateY(0deg) rotateZ(0deg);
+                opacity: 0;
+            }
+
+            70% {
+                transform: scale(1.1) rotateY(720deg) rotateZ(10deg);
+                opacity: 0.9;
+            }
+
+            100% {
+                transform: scale(1) rotateY(1080deg) rotateZ(0deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes spinZoomOut {
+            0% {
+                transform: scale(1) rotateY(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(0.0) rotateY(-720deg);
+                opacity: 0;
+            }
+        }
+
+        .animate-spin-in {
+            animation: spinZoomIn 0.85s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .animate-spin-out {
+            animation: spinZoomOut 0.6s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards;
+        }
+
+        /* Glassmorphism */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .glass-dark {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        /* Pulse aura for flowers */
+        .flower-hover:hover {
+            filter: drop-shadow(0 0 18px rgba(250, 204, 21, 0.9));
+            cursor: pointer;
+        }
+
+        /* Private access screen: a restrained, romantic-tech introduction. */
+        .access-screen {
+            isolation: isolate;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 50% 0%, rgba(91, 73, 170, 0.25), transparent 38%),
+                radial-gradient(circle at 80% 85%, rgba(250, 204, 21, 0.12), transparent 30%),
+                #030712;
+            transition: opacity 0.65s ease, visibility 0.65s ease;
+        }
+
+        .access-screen::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.16;
+            background: repeating-linear-gradient(to bottom, transparent 0, transparent 3px, rgba(148, 163, 184, 0.22) 4px);
+        }
+
+        .access-screen.is-exiting {
+            opacity: 0;
+        }
+
+        .access-orb {
+            position: absolute;
+            z-index: -1;
+            border-radius: 999px;
+            filter: blur(8px);
+            opacity: 0.55;
+            animation: accessOrb 9s ease-in-out infinite alternate;
+        }
+
+        .access-orb-one {
+            top: -15rem;
+            left: -10rem;
+            width: 28rem;
+            height: 28rem;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.35), transparent 68%);
+        }
+
+        .access-orb-two {
+            right: -12rem;
+            bottom: -14rem;
+            width: 32rem;
+            height: 32rem;
+            background: radial-gradient(circle, rgba(250, 204, 21, 0.25), transparent 68%);
+            animation-delay: -4s;
+        }
+
+        .access-particles {
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            opacity: 0.5;
+            background-image: radial-gradient(circle, rgba(253, 230, 138, 0.9) 0 1px, transparent 1.5px);
+            background-size: 76px 76px;
+            mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
+            animation: accessParticles 16s linear infinite;
+        }
+
+        .access-card {
+            border: 1px solid rgba(255, 255, 255, 0.17);
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.88), rgba(17, 24, 39, 0.74));
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.52), inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 0 45px rgba(250, 204, 21, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            animation: accessCardIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        .access-card-glow {
+            position: absolute;
+            top: -8rem;
+            right: -4rem;
+            width: 16rem;
+            height: 16rem;
+            border-radius: 50%;
+            background: rgba(250, 204, 21, 0.15);
+            filter: blur(50px);
+            pointer-events: none;
+        }
+
+        .access-kicker,
+        .access-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.17em;
+            color: #fcd34d;
+        }
+
+        .access-lock {
+            display: flex;
+            width: 2.9rem;
+            height: 2.9rem;
+            flex: 0 0 auto;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(252, 211, 77, 0.35);
+            border-radius: 0.95rem;
+            color: #fcd34d;
+            background: rgba(250, 204, 21, 0.08);
+            box-shadow: 0 0 28px rgba(250, 204, 21, 0.13);
+        }
+
+        .access-details,
+        .access-input {
+            border: 1px solid rgba(203, 213, 225, 0.14);
+            background: rgba(2, 6, 23, 0.36);
+        }
+
+        .access-progress-dot {
+            display: block;
+            width: 0.68rem;
+            height: 0.68rem;
+            border: 1.5px solid #94a3b8;
+            border-radius: 50%;
+            transition: all 0.45s ease;
+        }
+
+        .access-progress-dot.is-active,
+        .access-progress-dot.is-complete {
+            border-color: #fcd34d;
+            background: #fcd34d;
+            box-shadow: 0 0 12px rgba(252, 211, 77, 0.85);
+        }
+
+        .access-progress-line {
+            width: clamp(3rem, 12vw, 4.5rem);
+            height: 1px;
+            background: #475569;
+            transition: background 0.45s ease;
+        }
+
+        .access-progress-line.is-complete {
+            background: #fcd34d;
+            box-shadow: 0 0 8px rgba(252, 211, 77, 0.6);
+        }
+
+        .access-input {
+            transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+        }
+
+        .access-input::placeholder {
+            color: #94a3b8;
+        }
+
+        .access-input:focus {
+            border-color: rgba(252, 211, 77, 0.7);
+            background: rgba(15, 23, 42, 0.72);
+            box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.13), 0 0 22px rgba(250, 204, 21, 0.1);
+        }
+
+        .access-submit {
+            background: linear-gradient(110deg, #fde68a, #fbbf24, #f59e0b);
+            box-shadow: 0 12px 25px rgba(245, 158, 11, 0.2);
+        }
+
+        .access-submit:hover:not(:disabled) {
+            filter: brightness(1.07);
+            transform: translateY(-1px);
+            box-shadow: 0 15px 30px rgba(245, 158, 11, 0.3);
+        }
+
+        .access-submit:disabled {
+            cursor: wait;
+            opacity: 0.72;
+        }
+
+        .access-message.is-success {
+            color: #86efac;
+        }
+
+        .access-message.is-error {
+            color: #fda4af;
+        }
+
+        .is-shaking {
+            animation: accessShake 0.42s ease-in-out;
+            border-color: rgba(251, 113, 133, 0.9) !important;
+        }
+
+        .access-panel-exit {
+            animation: accessPanelOut 0.45s ease forwards;
+        }
+
+        .access-panel-enter {
+            animation: accessPanelIn 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        .access-granted-icon {
+            color: #bbf7d0;
+            border: 1px solid rgba(134, 239, 172, 0.45);
+            background: rgba(34, 197, 94, 0.12);
+            box-shadow: 0 0 30px rgba(74, 222, 128, 0.22);
+        }
+
+        .access-countdown.is-counting {
+            animation: accessCountdown 0.62s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        .reveal-screen {
+            opacity: 0;
+            background: #000;
+            transition: opacity 1s ease;
+        }
+
+        .reveal-screen.is-black {
+            opacity: 1;
+        }
+
+        .reveal-screen.is-fading {
+            opacity: 0;
+        }
+
+        .reveal-message {
+            transform: translateY(12px) scale(0.98);
+            text-shadow: 0 0 24px rgba(250, 204, 21, 0.42);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal-message.is-visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        @keyframes accessCardIn {
+            from { opacity: 0; transform: translateY(18px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes accessOrb {
+            from { transform: translate3d(-1.5rem, -0.8rem, 0) scale(0.94); }
+            to { transform: translate3d(1.5rem, 1rem, 0) scale(1.08); }
+        }
+
+        @keyframes accessParticles {
+            from { transform: translateY(0); }
+            to { transform: translateY(-76px); }
+        }
+
+        @keyframes accessShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+
+        @keyframes accessPanelOut {
+            to { opacity: 0; transform: translateY(-10px); }
+        }
+
+        @keyframes accessPanelIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes accessCountdown {
+            from { opacity: 0; transform: scale(1.55); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @media (max-width: 420px) {
+            .access-card { border-radius: 1.5rem; }
+            .access-orb-one { left: -15rem; }
+            .access-orb-two { right: -17rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .access-orb,
+            .access-particles,
+            .access-card,
+            .access-panel-exit,
+            .access-panel-enter,
+            .access-countdown.is-counting,
+            .is-shaking {
+                animation: none;
+            }
+
+            .access-screen,
+            .reveal-screen,
+            .reveal-message {
+                transition-duration: 0.01ms;
+            }
+        }

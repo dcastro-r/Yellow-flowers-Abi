@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz 21 de Septiembre 💛</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Quicksand:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body class="sky-day min-h-screen text-slate-800 relative select-none transition-colors duration-1000">
+
+    <!-- Audio Player (Flores Amarillas - Instrumental/Romantic Tone) -->
+    <audio id="bg-music" loop preload="auto">
+        <!-- Relaxing romantic sunflower tune -->
+        <source src="Bruno Mars - Risk It All.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- PRIVATE ACCESS EXPERIENCE -->
+    <section id="access-screen" class="access-screen fixed inset-0 z-[60] flex items-center justify-center p-4"
+        aria-labelledby="access-title">
+        <div class="access-orb access-orb-one" aria-hidden="true"></div>
+        <div class="access-orb access-orb-two" aria-hidden="true"></div>
+        <div class="access-particles" aria-hidden="true"></div>
+
+        <div id="access-card" class="access-card relative w-full max-w-lg overflow-hidden rounded-[2rem] p-6 sm:p-9">
+            <div class="access-card-glow" aria-hidden="true"></div>
+            <div class="relative z-10">
+                <div class="mb-7 flex items-start justify-between gap-4">
+                    <div>
+                        <p class="access-kicker text-center">PROTOCOLO PRIVADO</p>
+                        <h1 id="access-title" class="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                            Sistema de acceso</h1>
+                        <p class="mt-3 max-w-sm text-sm leading-relaxed text-slate-300 sm:text-base">
+                            Se requiere verificar que eres la persona indicada para continuar.
+                        </p>
+                    </div>
+                    <div class="access-lock" aria-hidden="true"><i class="fa-solid fa-lock"></i></div>
+                </div>
+
+                <div class="access-details mb-7 grid gap-3 rounded-2xl p-4 text-sm sm:grid-cols-2">
+                    <div>
+                        <p class="access-label">USUARIO IDENTIFICADO</p>
+                        <p class="mt-1 font-semibold text-white">Abigail</p>
+                    </div>
+                    <div>
+                        <p class="access-label">NIVEL DE ACCESO</p>
+                        <p id="access-level" class="mt-1 font-semibold text-amber-200"><span
+                                aria-hidden="true">&#128274;</span> Pendiente</p>
+                    </div>
+                </div>
+
+                <div id="verification-panel" class="access-panel">
+                    <p class="mb-5 text-center text-base font-semibold text-amber-100 sm:text-lg">¿Eres la persona
+                        indicada?</p>
+                    <div class="mb-2 flex items-center justify-center gap-2" aria-label="Progreso de verificación">
+                        <span class="access-progress-dot is-active" data-progress-dot="0"></span>
+                        <span class="access-progress-line" data-progress-line="0"></span>
+                        <span class="access-progress-dot" data-progress-dot="1"></span>
+                        <span class="access-progress-line" data-progress-line="1"></span>
+                        <span class="access-progress-dot" data-progress-dot="2"></span>
+                    </div>
+                    <p id="verification-count"
+                        class="mb-6 text-center text-xs font-bold tracking-[0.2em] text-slate-400">VERIFICACIÓN 1/3</p>
+
+                    <form id="verification-form" novalidate>
+                        <label id="verification-question" for="verification-answer"
+                            class="mb-3 block text-center text-lg font-semibold text-white sm:text-xl"></label>
+                        <input id="verification-answer" type="text" autocomplete="off" spellcheck="false"
+                            class="access-input w-full rounded-xl px-4 py-3.5 text-center text-base text-white outline-none sm:text-lg"
+                            placeholder="Escribe tu respuesta" aria-describedby="verification-message" required>
+                        <p id="verification-message"
+                            class="access-message min-h-11 pt-3 text-center text-sm font-semibold" aria-live="polite">
+                        </p>
+                        <button id="verification-submit" type="submit"
+                            class="access-submit w-full rounded-xl px-5 py-3.5 font-bold text-slate-950 transition">
+                            Verificar identidad <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <div id="access-granted-panel" class="hidden text-center" aria-live="polite">
+                    <div class="access-granted-icon mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full text-2xl"
+                        aria-hidden="true"><i class="fa-solid fa-unlock-keyhole"></i></div>
+                    <h2 class="text-3xl font-bold text-white sm:text-4xl">Acceso concedido.</h2>
+                    <p class="mt-6 text-lg text-amber-100">Aunque...</p>
+                    <p class="mt-2 text-base leading-relaxed text-slate-300 sm:text-lg">esto no era realmente una página
+                        de acceso. &#128064;</p>
+                    <p id="preparing-message"
+                        class="mt-8 text-sm font-bold tracking-[0.18em] text-amber-200 opacity-0 transition-opacity duration-500">
+                        PREPARANDO SORPRESA...</p>
+                    <p id="countdown-number"
+                        class="access-countdown mt-3 h-20 text-6xl font-bold text-white sm:text-7xl"
+                        aria-live="assertive"></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="reveal-screen"
+        class="reveal-screen pointer-events-none fixed inset-0 z-[70] hidden items-center justify-center p-6 text-center"
+        aria-live="polite">
+        <p id="reveal-message" class="reveal-message max-w-md text-3xl font-bold text-white opacity-0 sm:text-5xl">Era
+            una sorpresa para ti. &#127803;&#128155;</p>
+    </section>
+
+    <!-- WELCOME MODAL / SCREEN -->
+    <div id="welcome-modal"
+        class="hidden fixed inset-0 z-50 items-center justify-center p-4 bg-black/60 backdrop-blur-md transition-opacity duration-700">
+        <div
+            class="glass-card max-w-md w-full rounded-3xl p-8 text-center shadow-2xl border-4 border-yellow-300 relative overflow-hidden transform transition-all scale-100">
+            <div class="absolute -top-12 -right-12 w-32 h-32 bg-yellow-300/30 rounded-full blur-2xl"></div>
+
+            <div
+                class="w-20 h-20 mx-auto mb-4 bg-yellow-100 rounded-full flex items-center justify-center text-4xl shadow-inner text-yellow-500 animate-bounce">
+                🌻
+            </div>
+
+            <h1 class="text-3xl sm:text-4xl font-bold font-romantic text-yellow-800 mb-2">¡Hola, Abigail!</h1>
+            <p class="text-slate-600 mb-6 text-sm sm:text-base leading-relaxed">
+                Tengo un detalle muy especial preparado con todo mi amor para este <strong class="text-yellow-700">dia
+                    21</strong>.
+            </p>
+
+            <button id="start-btn"
+                class="w-full py-4 px-6 bg-gradient-to-r from-yellow-400 via-amber-400 to-yellow-500 hover:from-yellow-500 hover:to-amber-600 text-slate-900 font-bold rounded-2xl shadow-lg hover:shadow-yellow-400/50 transform hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-3 text-lg">
+                <i class="fa-solid fa-heart text-red-500 animate-pulse"></i>
+                <span>Abrir Tu Sorpresa</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- TOP BAR CONTROLS -->
+    <header class="fixed top-0 left-0 w-full p-4 z-40 flex items-center justify-between pointer-events-none">
+        <div
+            class="pointer-events-auto flex gap-2 bg-white/70 dark:bg-slate-900/70 backdrop-blur-md px-4 py-2 rounded-full shadow-md text-xs sm:text-sm font-semibold text-slate-700 dark:text-yellow-300 border border-white/40">
+            <span>♂️ De: Diego <br>🌻 Para: Abigail</span>
+        </div>
+
+        <div class="pointer-events-auto flex items-center gap-3">
+            <!-- Sky Theme Toggle Button -->
+            <button id="theme-toggle"
+                class="p-3 bg-white/70 dark:bg-slate-800/80 backdrop-blur-md rounded-full shadow-md border border-white/40 text-slate-700 dark:text-yellow-300 hover:scale-110 active:scale-95 transition-all"
+                title="Cambiar ambiente Día/Noche">
+                <i id="theme-icon" class="fa-solid fa-moon text-lg"></i>
+            </button>
+
+            <!-- Music Floating Toggle -->
+            <button id="music-toggle"
+                class="px-4 py-2 bg-white/70 dark:bg-slate-800/80 backdrop-blur-md rounded-full shadow-md border border-white/40 text-slate-800 dark:text-white hover:scale-105 active:scale-95 transition-all flex items-center gap-2 text-xs sm:text-sm font-semibold">
+                <i id="music-icon" class="fa-solid fa-compact-disc text-yellow-500 animate-spin text-base"></i>
+                <span id="music-status">Música On</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="relative w-full min-h-screen flex flex-col justify-end pt-16 overflow-hidden">
+
+        <!-- VIEW 1: PRADO / FIELD MODE -->
+        <section id="meadow-view"
+            class="relative w-full h-full flex-1 flex flex-col justify-end transition-opacity duration-700">
+
+            <!-- Sun & Clouds (Day Elements) -->
+            <div id="sun-element"
+                class="absolute top-10 right-8 sm:right-24 w-28 h-28 sm:w-36 sm:h-36 bg-yellow-200 rounded-full shadow-[0_0_80px_rgba(250,204,21,0.9)] animate-pulse transition-opacity duration-1000">
+            </div>
+
+            <div id="clouds-container"
+                class="absolute top-12 left-0 w-full pointer-events-none transition-opacity duration-1000">
+                <div class="absolute top-4 left-10 text-white/80 text-6xl opacity-90 animate-pulse"><i
+                        class="fa-solid fa-cloud"></i></div>
+                <div class="absolute top-12 right-20 text-white/70 text-8xl opacity-80"><i
+                        class="fa-solid fa-cloud"></i></div>
+            </div>
+
+            <!-- Fireflies Container (Night Mode) -->
+            <div id="fireflies-container"
+                class="absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-1000"></div>
+
+            <!-- Hint Message -->
+            <div class="absolute top-5 left-1/2 transform -translate-x-1/2 text-center z-20 w-[94%] max-w-6xl">
+                <div class="px-4 py-5 sm:px-8 sm:py-7">
+                    <!-- Puedes editar libremente las frases de esta dedicatoria. -->
+                    <p class="phrase-outline phrase-ink text-xs tracking-[0.28em] sm:text-sm">
+                        ---- CON TODO CARIÑO PARA TI ----
+                    </p>
+                    <p
+                        class="phrase-outline phrase-ink mt-5 font-serif text-3xl leading-none tracking-tight sm:text-5xl lg:text-7xl">
+                        HAY PERSONAS QUE
+                    </p>
+                    <p
+                        class="phrase-outline phrase-yellow mt-1 font-serif text-3xl leading-none tracking-tight sm:text-5xl lg:text-7xl">
+                        HACEN FLORECER TODO.
+                    </p>
+                    <p
+                        class="phrase-outline phrase-ink mx-auto mt-5 max-w-2xl text-sm leading-snug tracking-wide sm:mt-7 sm:text-base">
+                        “Y luego estás tú, Mi Abigail. Mi manera favorita de ver la vida en amarillo.”
+                    </p>
+                </div>
+            </div>
+
+            <!-- Grassy Field with Sunflowers -->
+            <div class="relative w-full h-[68vh] sm:h-[72vh] flex items-end justify-center">
+                <!-- Grass hills backdrop -->
+                <div
+                    class="absolute inset-x-0 bottom-0 h-full bg-gradient-to-t from-emerald-800 via-emerald-600 to-transparent opacity-90 rounded-t-[40%] scale-110">
+                </div>
+                <div
+                    class="absolute inset-x-0 -bottom-8 h-3/4 bg-gradient-to-t from-green-900 via-emerald-700 to-transparent rounded-t-[50%]">
+                </div>
+
+                <!-- Sunflowers Grid / Meadow Layout -->
+                <div id="meadow-flowers"
+                    class="relative z-20 w-full h-full flex items-end justify-between px-2 sm:px-4 pb-4">
+                    <!-- Dynamic Flowers generated via JS -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- INTERACTIVE NOTE MODAL WITH 3D SPIN ANIMATION -->
+    <div id="note-modal"
+        class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-all duration-300">
+
+        <!-- Spinning Sunflower Graphic Container -->
+        <div id="flower-spin-container" class="relative z-10 flex flex-col items-center max-w-sm w-full">
+
+            <div id="spin-flower-icon"
+                class="w-32 h-32 mb-4 text-7xl flex items-center justify-center filter drop-shadow-[0_10px_20px_rgba(250,204,21,0.6)]">
+                🌻
+            </div>
+
+            <!-- Note Card -->
+            <div id="note-card-body"
+                class="glass-card dark:glass-dark w-full rounded-3xl p-6 sm:p-8 text-center shadow-2xl border-2 border-yellow-300 relative overflow-hidden transform">
+                <div class="absolute top-0 right-0 p-4 text-yellow-500/20 text-6xl pointer-events-none">✨</div>
+
+                <button id="close-note-icon" type="button"
+                    class="absolute top-3 right-3 flex h-9 w-9 items-center justify-center rounded-full text-xl text-yellow-700 dark:text-yellow-300 transition hover:bg-yellow-100/80 dark:hover:bg-slate-700/80"
+                    aria-label="Cerrar nota">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+                <h3 id="note-title" class="text-2xl font-bold font-romantic text-black mb-3">
+                    Para mi amor
+                </h3>
+
+                <p id="note-content" class="text-black text-sm sm:text-base leading-relaxed mb-6 font-medium">
+                    Mensaje de amor...
+                </p>
+
+                <button id="close-note-btn"
+                    class="w-full py-3 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-slate-900 font-bold rounded-xl shadow-md transition transform active:scale-95 flex items-center justify-center gap-2">
+                    <span>Guardar Notita</span>
+                    <i class="fa-solid fa-heart text-red-500"></i>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- FINAL SURPRISE MODAL (STEP 6) -->
+    <div id="final-modal"
+        class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+        <div
+            class="glass-card dark:glass-dark max-w-lg w-full rounded-3xl p-8 text-center shadow-2xl border-4 border-yellow-400 relative overflow-hidden animate-bounce-short">
+
+            <div class="text-6xl mb-3 animate-spin-slow">🌻✨</div>
+
+            <h2 class="text-3xl sm:text-4xl font-bold font-romantic text-black mb-2">
+                ¡Feliz 21 de Septiembre!
+            </h2>
+            <h3 class="text-xl font-bold text-black mb-4">
+                Mi amada Abigail ❤️
+            </h3>
+
+            <p class="text-black text-sm sm:text-base leading-relaxed mb-6">
+                Este ramo virtual de flores amarillas nunca se marchitará, igual que mi amor por ti. Gracias por llenar
+                mi vida de luz, alegría y los momentos más hermosos. ¡Eres y serás siempre mi persona favorita!
+            </p>
+
+            <div class="p-4 bg-yellow-400/20 rounded-2xl border border-yellow-400/40 mb-6">
+                <p class="text-xs sm:text-sm font-semibold text-black italic">
+                    "Te quiero hoy, mañana y para siempre."
+                </p>
+            </div>
+
+            <button id="restart-btn"
+                class="w-full py-3.5 bg-gradient-to-r from-yellow-400 via-amber-400 to-yellow-500 hover:from-yellow-500 hover:to-amber-600 text-slate-900 font-bold rounded-xl shadow-lg transition transform active:scale-95">
+                Revivir la Presentación 💖
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Romantic Story Notes Data
+        const ROMANTIC_NOTES = [
+            {
+                step: 1,
+                title: "Hola Abi, mi amorcito de por vida... 💛",
+                content: "Hoy es 21 de septiembre, un día lleno de luz y girasoles 🌻, pero ninguna flor brilla tanto como tus ojos 👀. Quise preparar este detalle especial para ti."
+            },
+            {
+                step: 2,
+                title: "Tú iluminas mis días ☀️",
+                content: "Así como las flores encuentran el sol, yo siempre encuentro la felicidad y paz cuando estoy a tu lado. Te amo tanto ... ❤️"
+            },
+            {
+                step: 3,
+                title: "Detalles que enamoran 🌼",
+                content: "Cada risa que compartimos, cada mensaje iniciando por los Buenos días y cada momento a tu lado se ha convertido en mis mejores momentos. Nuevamente te lo repito, gracias por aparecer en mi vida y hacerla tan especial."
+            },
+            {
+                step: 4,
+                title: "Unos girasoles hecho de recuerdos 🌻",
+                content: "Cada girasol de este jardín lleva un mensaje sincero: deseo un amor que siga creciendo."
+            },
+            {
+                step: 5,
+                title: "Mi lugar favorito en el mundo 🌍",
+                content: "No importa el lugar ni la hora, mi rincón feliz en el mundo siempre será donde tú estés. Eres mi compañera de vida perfecto."
+            },
+            {
+                step: 6,
+                title: "Un detalle para cada momento 🌻",
+                content: "Quise que cada flor guardara una pequeña parte de todo lo bonito que siento cuando pienso en ti."
+            },
+            {
+                step: 7,
+                title: "Te amo tanto... 💖",
+                content: "Los momentos compartidos contigo iluminan los días grises."
+            },
+            {
+                step: 8,
+                title: "Contigo todo se siente bien 🦋",
+                content: "No necesito un lugar perfecto si estoy contigo, donde sea que nos encontremos siempre será un lugar seguro y lleno de amor."
+            },
+            {
+                step: 9,
+                title: "Gracias por ser tú ✨",
+                content: "Por tu forma de mirarme, por tu corazón tan bonito y por hacer que mi vida tenga más sentido aún."
+            },
+            {
+                step: 10,
+                title: "Mi pensamiento bonito 💛",
+                content: "Entre tantas cosas que pasan en un día, siempre hay un momento en el que apareces en mi mente y todo mejora."
+            },
+            {
+                step: 11,
+                title: "Eres calma y aventura 🌤️",
+                content: "Me das paz cuando la necesito y mucha emoción cuando veo escribiendo un mensaje para para mi."
+            },
+            {
+                step: 12,
+                title: "Doce pequeños deseos 🌼",
+                content: "Deseo que nunca te falten motivos para sonreír, personas que te cuiden y sueños que sigas a pie de letra 💖."
+            },
+            {
+                step: 13,
+                title: "Gracias a Harumy JEJE 🍀",
+                content: "Supe de ti gracias a Harumy, y desde ese momento me atrajiste. Gracias por ser parte de mi vida."
+            },
+            {
+                step: 14,
+                title: "Y quiero que recuerdes... 💫",
+                content: "Que te amo 1% más que tú ❤️"
+            },
+            {
+                step: 15,
+                title: "Y quiero que recuerdes... 💫",
+                content: "Que yo gané ❤️"
+            },
+            {
+                step: 16,
+                title: "Casi al final del prado 🌅",
+                content: "Cada flor te ha contado una parte de nuestra historia, pero todavía queda una última cosa por decirte."
+            },
+            {
+                step: 17,
+                title: "Flores para tu camino 🌻",
+                content: "Que cada paso que des te acerque a algo que te haga feliz, y que siempre encuentres luz incluso en los días nublados."
+            },
+            {
+                step: 18,
+                title: "Y quiero que recuerdes... 💛",
+                content: "Que te amo al 100 %, hoy, mañana y siempre."
+            },
+        ];
+
+        const FLOWER_COUNT = 18;
+
+        let currentStep = 0;
+        let isNight = false;
+        let isPlayingAudio = false;
+
+        // DOM Elements
+        const bgMusic = document.getElementById('bg-music');
+        const welcomeModal = document.getElementById('welcome-modal');
+        const startBtn = document.getElementById('start-btn');
+        const musicToggle = document.getElementById('music-toggle');
+        const musicIcon = document.getElementById('music-icon');
+        const musicStatus = document.getElementById('music-status');
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+
+        const meadowFlowersContainer = document.getElementById('meadow-flowers');
+
+        const noteModal = document.getElementById('note-modal');
+        const flowerSpinContainer = document.getElementById('flower-spin-container');
+        const noteTitle = document.getElementById('note-title');
+        const noteContent = document.getElementById('note-content');
+        const closeNoteBtn = document.getElementById('close-note-btn');
+        const closeNoteIcon = document.getElementById('close-note-icon');
+
+        const finalModal = document.getElementById('final-modal');
+        const restartBtn = document.getElementById('restart-btn');
+
+        // Private access flow: answers are normalized so accents, case and extra spaces do not matter.
+        const verificationQuestions = [
+            {
+                question: '¿Cuál es tu color favorito?',
+                answers: ['lila']
+            },
+            {
+                question: '¿Cuál es tu comida favorita?',
+                answers: ['arroz a la cubana']
+            },
+            {
+                question: '¿Cuál es tu postre favorito?',
+                answers: ['torta de chocolate']
+            }
+        ];
+
+        const accessScreen = document.getElementById('access-screen');
+        const accessCard = document.getElementById('access-card');
+        const accessLevel = document.getElementById('access-level');
+        const verificationPanel = document.getElementById('verification-panel');
+        const verificationForm = document.getElementById('verification-form');
+        const verificationQuestion = document.getElementById('verification-question');
+        const verificationCount = document.getElementById('verification-count');
+        const verificationAnswer = document.getElementById('verification-answer');
+        const verificationMessage = document.getElementById('verification-message');
+        const verificationSubmit = document.getElementById('verification-submit');
+        const accessGrantedPanel = document.getElementById('access-granted-panel');
+        const preparingMessage = document.getElementById('preparing-message');
+        const countdownNumber = document.getElementById('countdown-number');
+        const revealScreen = document.getElementById('reveal-screen');
+        const revealMessage = document.getElementById('reveal-message');
+        let currentVerification = 0;
+        let verificationLocked = false;
+
+        function normalizeAnswer(answer) {
+            return answer
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .toLowerCase()
+                .trim()
+                .replace(/\s+/g, ' ');
+        }
+
+        function updateVerificationProgress() {
+            document.querySelectorAll('[data-progress-dot]').forEach((dot, index) => {
+                dot.classList.toggle('is-complete', index < currentVerification);
+                dot.classList.toggle('is-active', index === currentVerification);
+            });
+            document.querySelectorAll('[data-progress-line]').forEach((line, index) => {
+                line.classList.toggle('is-complete', index < currentVerification);
+            });
+        }
+
+        function renderVerification() {
+            const currentQuestion = verificationQuestions[currentVerification];
+            verificationQuestion.textContent = currentQuestion.question;
+            verificationCount.textContent = `VERIFICACIÓN ${currentVerification + 1}/${verificationQuestions.length}`;
+            verificationAnswer.value = '';
+            verificationMessage.textContent = '';
+            verificationMessage.className = 'access-message min-h-11 pt-3 text-center text-sm font-semibold';
+            verificationSubmit.disabled = false;
+            updateVerificationProgress();
+            requestAnimationFrame(() => verificationAnswer.focus());
+        }
+
+        function showVerificationError() {
+            verificationMessage.textContent = '✕ Código incorrecto. Inténtalo nuevamente.';
+            verificationMessage.className = 'access-message is-error min-h-11 pt-3 text-center text-sm font-semibold';
+            verificationAnswer.value = '';
+            verificationAnswer.classList.remove('is-shaking');
+            void verificationAnswer.offsetWidth;
+            verificationAnswer.classList.add('is-shaking');
+            verificationAnswer.focus();
+        }
+
+        function beginReveal() {
+            accessScreen.classList.add('is-exiting');
+            revealScreen.classList.remove('hidden');
+            revealScreen.classList.add('flex', 'is-black');
+
+            setTimeout(() => revealMessage.classList.add('is-visible'), 500);
+            setTimeout(() => {
+                accessScreen.classList.add('hidden');
+                revealScreen.classList.add('is-fading');
+            }, 3000);
+            setTimeout(() => {
+                revealScreen.classList.add('hidden');
+                revealScreen.classList.remove('flex', 'is-black', 'is-fading');
+            }, 4000);
+        }
+
+        function showCountdown() {
+            preparingMessage.classList.add('opacity-100');
+            const numbers = ['3', '2', '1'];
+            numbers.forEach((number, index) => {
+                setTimeout(() => {
+                    countdownNumber.textContent = number;
+                    countdownNumber.classList.remove('is-counting');
+                    void countdownNumber.offsetWidth;
+                    countdownNumber.classList.add('is-counting');
+                }, index * 750);
+            });
+            setTimeout(beginReveal, numbers.length * 750 + 500);
+        }
+
+        function grantAccess() {
+            accessLevel.innerHTML = '<span aria-hidden="true">&#128275;</span> Concedido';
+            accessLevel.classList.remove('text-amber-200');
+            accessLevel.classList.add('text-emerald-300');
+            verificationPanel.classList.add('access-panel-exit');
+            setTimeout(() => {
+                verificationPanel.classList.add('hidden');
+                accessGrantedPanel.classList.remove('hidden');
+                accessGrantedPanel.classList.add('access-panel-enter');
+                if (!isPlayingAudio) toggleAudio();
+                setTimeout(showCountdown, 1800);
+            }, 450);
+        }
+
+        verificationForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            if (verificationLocked) return;
+
+            const normalizedResponse = normalizeAnswer(verificationAnswer.value);
+            const acceptedAnswers = verificationQuestions[currentVerification].answers.map(normalizeAnswer);
+            if (!acceptedAnswers.includes(normalizedResponse)) {
+                showVerificationError();
+                return;
+            }
+
+            verificationLocked = true;
+            verificationSubmit.disabled = true;
+            verificationMessage.textContent = '✓ Código aceptado. Verificación superada.';
+            verificationMessage.className = 'access-message is-success min-h-11 pt-3 text-center text-sm font-semibold';
+            currentVerification += 1;
+            updateVerificationProgress();
+
+            setTimeout(() => {
+                if (currentVerification === verificationQuestions.length) {
+                    grantAccess();
+                } else {
+                    verificationLocked = false;
+                    renderVerification();
+                }
+            }, 1100);
+        });
+        // Initialize Fireflies Effect (Night Mode)
+        function createFireflies() {
+            const container = document.getElementById('fireflies-container');
+            container.innerHTML = '';
+            for (let i = 0; i < 25; i++) {
+                const firefly = document.createElement('div');
+                firefly.classList.add('firefly');
+                firefly.style.left = `${Math.random() * 100}%`;
+                firefly.style.top = `${Math.random() * 80}%`;
+                firefly.style.animationDuration = `${Math.random() * 3 + 2}s`;
+                firefly.style.animationDelay = `${Math.random() * 2}s`;
+                container.appendChild(firefly);
+            }
+        }
+
+        // Render Meadow Sunflowers
+        function renderMeadowFlowers() {
+            meadowFlowersContainer.innerHTML = '';
+            const flowerCount = FLOWER_COUNT;
+            for (let i = 0; i < flowerCount; i++) {
+                const flowerDiv = document.createElement('div');
+                flowerDiv.className = 'meadow-flower sway-flower flower-hover flex flex-col items-center transition-transform hover:scale-110';
+
+                // Varied stem heights create a single, comfortable meadow line.
+                const stemHeight = 160 + (i % 3) * 35;
+                const noteIndex = i;
+
+                flowerDiv.innerHTML = `
+                    <div class="relative cursor-pointer" onclick="openNote(${noteIndex})">
+                        <!-- Sunflower Head SVG -->
+                        <svg class="w-14 h-14 sm:w-20 sm:h-20 filter drop-shadow-md" viewBox="0 0 100 100">
+                            <!-- Petals -->
+                            <g fill="#facc15" stroke="#eab308" stroke-width="1.5">
+                                ${Array.from({ length: 12 }).map((_, p) => `
+                                    <path d="M 50 50 Q 50 10 50 5 Q 55 25 50 50" transform="rotate(${p * 30} 50 50)"/>
+                                `).join('')}
+                            </g>
+                            <!-- Center Disk -->
+                            <circle cx="50" cy="50" r="20" fill="#713f12" stroke="#451a03" stroke-width="2"/>
+                            <circle cx="50" cy="50" r="16" fill="#854d0e" stroke-dasharray="2,2"/>
+                        </svg>
+                    </div>
+                    <!-- Stem & Leaves -->
+                    <div class="w-2.5 bg-emerald-600 rounded-full relative" style="height: ${stemHeight}px;">
+                        <div class="absolute top-1/3 -left-4 w-6 h-3 bg-emerald-500 rounded-full transform -rotate-45"></div>
+                        <div class="absolute top-1/2 -right-4 w-6 h-3 bg-emerald-500 rounded-full transform rotate-45"></div>
+                    </div>
+                `;
+                meadowFlowersContainer.appendChild(flowerDiv);
+            }
+        }
+
+        // Open Romantic Note with 3D Spin Animation
+        function openNote(index) {
+            currentStep = index;
+            const note = ROMANTIC_NOTES[currentStep];
+
+            noteTitle.textContent = note.title;
+            noteContent.textContent = note.content;
+
+            // Trigger 3D Spin Animation
+            flowerSpinContainer.classList.remove('animate-spin-out');
+            flowerSpinContainer.classList.add('animate-spin-in');
+
+            noteModal.classList.remove('hidden');
+
+            // Trigger light confetti burst on note open
+            confetti({
+                particleCount: 25,
+                spread: 60,
+                origin: { y: 0.6 },
+                colors: ['#facc15', '#f59e0b', '#ffffff']
+            });
+        }
+
+        // Close Note Modal with Reverse Spin Animation
+        function closeNote() {
+            flowerSpinContainer.classList.remove('animate-spin-in');
+            flowerSpinContainer.classList.add('animate-spin-out');
+
+            setTimeout(() => {
+                noteModal.classList.add('hidden');
+                // Check if last step reached
+                if (currentStep === FLOWER_COUNT - 1) {
+                    showFinalSurprise();
+                }
+            }, 550);
+        }
+
+        // Toggle Day / Night Sky
+        function toggleTheme() {
+            isNight = !isNight;
+            const sun = document.getElementById('sun-element');
+            const clouds = document.getElementById('clouds-container');
+            const fireflies = document.getElementById('fireflies-container');
+
+            if (isNight) {
+                document.body.classList.remove('sky-day');
+                document.body.classList.add('sky-night');
+                themeIcon.className = 'fa-solid fa-sun text-yellow-300 text-lg';
+                sun.style.opacity = '0';
+                clouds.style.opacity = '0.2';
+                fireflies.style.opacity = '1';
+            } else {
+                document.body.classList.remove('sky-night');
+                document.body.classList.add('sky-day');
+                themeIcon.className = 'fa-solid fa-moon text-lg';
+                sun.style.opacity = '1';
+                clouds.style.opacity = '1';
+                fireflies.style.opacity = '0';
+            }
+        }
+
+        // Audio Controls
+        function toggleAudio() {
+            if (isPlayingAudio) {
+                bgMusic.pause();
+                musicIcon.classList.remove('animate-spin');
+                musicStatus.textContent = 'Música Off';
+                isPlayingAudio = false;
+            } else {
+                bgMusic.play().then(() => {
+                    musicIcon.classList.add('animate-spin');
+                    musicStatus.textContent = 'Música On';
+                    isPlayingAudio = true;
+                }).catch(e => console.log("Audio play blocked", e));
+            }
+        }
+
+        // Final Celebration Modal
+        function showFinalSurprise() {
+            finalModal.classList.remove('hidden');
+            // Grand Confetti Blast
+            const duration = 3 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#facc15', '#f59e0b', '#ef4444', '#ffffff']
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#facc15', '#f59e0b', '#ef4444', '#ffffff']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            })();
+        }
+
+        // Event Listeners
+        musicToggle.addEventListener('click', toggleAudio);
+        themeToggle.addEventListener('click', toggleTheme);
+        closeNoteBtn.addEventListener('click', closeNote);
+        closeNoteIcon.addEventListener('click', closeNote);
+
+        noteModal.addEventListener('click', (event) => {
+            if (event.target === noteModal) closeNote();
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && !noteModal.classList.contains('hidden')) closeNote();
+        });
+
+        restartBtn.addEventListener('click', () => {
+            finalModal.classList.add('hidden');
+            openNote(0);
+        });
+
+        // Initialize Page Elements
+        window.addEventListener('DOMContentLoaded', () => {
+            createFireflies();
+            renderMeadowFlowers();
+            renderVerification();
+        });
+    </script>
+</body>
+
+</html>
